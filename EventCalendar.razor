@@ -1,0 +1,91 @@
+﻿
+<div class="calendar">
+	<table class="calendar-table">
+		<thead>
+			<tr>
+				<td>Sun</td>
+				<td>Mon</td>
+				<td>Tue</td>
+				<td>Wed</td>
+				<td>Thu</td>
+				<td>Fri</td>
+				<td>Sat</td>
+			</tr>
+		</thead>
+		<tbody>
+			@for (int r = 0; r < 0; r++)
+			{
+				<tr>
+					<td>
+						<div class="day shadow-effect">
+
+							<h3></h3>
+						</div>
+					</td>
+					<td>
+						<div class="day shadow-effect">
+
+							<h3></h3>
+						</div>
+					</td>
+					<td>
+						<div class="day shadow-effect">
+
+							<h3></h3>
+						</div>
+					</td>
+					<td>
+						<div class="day shadow-effect">
+
+							<h3>01</h3>
+						</div>
+					</td>
+					<td>
+						<div class="day shadow-effect">
+
+							<h3>02</h3>
+						</div>
+					</td>
+					<td>
+						<div class="day shadow-effect">
+
+							<h3>03</h3>
+						</div>
+					</td>
+					<td>
+						<div class="day shadow-effect">
+
+							<h3>04</h3>
+						</div>
+					</td>
+				</tr>
+			}
+
+		</tbody>
+		<tbody>
+			@for (int r = 0; r < rowsCount; r++)
+			{
+				<tr>
+					@foreach (var item in days.Skip(r * 7).Take(7))
+					{
+
+						<td class="day shadow-effect"><h3>@item.DayNumber</h3></td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+
+
+</div>
+
+
+@code {
+
+	[Parameter]
+	public List<CalendarDay> days { get; set; }
+
+	[Parameter]
+	public int rowsCount { get; set; }
+
+}
