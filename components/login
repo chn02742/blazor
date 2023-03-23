@@ -1,1 +1,95 @@
+@using System.Text.Json
+
+<div class="container col-md-8 " style="min-width:325px">
+	<EditForm Model="@login" OnSubmit="@ValidateUser" style="background-color:whitesmoke;">
+		<DataAnnotationsValidator />
+		@*<div class="ml-xl-5">*@
+		<br /><br /><br /><br />
+		<div>
+			<h3 style="font-weight:bold; color:navy">Login</h3>
+		</div>
+		<div>
+			<br />
+		</div>
+		<div class=" col-9 row content ">
+			<input class="form-control col-xs-12" @bind="login.Login" placeholder="UserId" />
+			<div class=" form-row col-xs-12 "><ValidationMessage For="@(() => login.Login)" /> </div>
+		</div>
+
+		<br />
+		<div class="col-9 row content">
+			<input type="password" class="form-control col-xs-12" @bind="login.Password" placeholder="Password" />
+			<div class="form-row col-xs-12 "><ValidationMessage For="@(() => login.Password)" /> </div>
+		</div>
+		<br />
+		@*<div class="col-12 row m-0">*@
+		<span class="col-12 row"></span>
+		@*<input type="submit" class="form-control col-6 btn btn-primary" value="Login" />*@
+		<input type="submit" class="btn btn-primary col-10 col-xl-9 " value="Log In" disabled=@buttonState />
+		<div class="col-10 card-header  col-xl-9  ">
+			<span>
+				<a href=@signupUrl class="fas fa-user-plus"> &nbsp; "New User", "click To Register" </a>	 &nbsp;
+				<a class="m-l-150 font-150p" runat="server" href="docs/help/PolicyholderHowToRegister.pdf" target="_blank" title="How to register?">
+					<i class="fa fa-question-circle fa-fw"></i>
+				</a>
+			</span>
+		</div>
+		<div class="col-10 card-header col-xl-9  ">
+			<span>
+				<a href=@forgetUrl class="fas fa-unlink">&nbsp; "Forgot Password"/ "UserId"</a>
+			</span>
+		</div>
+		@*</div>*@
+
+		<br />
+		<div class="col-12 row" style="text-align:left; font-weight:bold;">
+			<span class="col-12 alert-danger text-lg-center">@LoginMesssage</span>
+		</div>
+		<div class="col-12 row" style="text-align:left; font-weight:bold">
+			<span class="col-12"></span>
+		</div>
+		@*</div>*@
+	</EditForm>
+</div>
+
+@code {
+
+	InputLoginModel login = new InputLoginModel();
+	string Token { get; set; }
+	public string LoginMesssage = "";
+	[Parameter]
+	public string signupUrl { get; set; }
+	[Parameter]
+	public string forgetUrl { get; set; } 
+	[Parameter]
+	public EventCallback<string> OnSubmit { get; set; }
+
+	//bool IsRunning = false;
+	[Parameter]
+	public bool buttonState { get; set; } // = false;
+
+
+	private Task ValidateUser(EditContext editContext)
+	{
+		bool formIsValid = editContext.Validate();
+		//buttonState = false;
+
+		if (!formIsValid)
+			return Task.FromResult(false); ;       // return to the login screen
+
+
+		if (formIsValid)
+		{
+			string loginString = JsonSerializer.Serialize(login);
+			return OnSubmit.InvokeAsync(loginString);
+			//return Task.FromResult(true);
+			//return await Task.FromResult(true);  // OnSubmit.InvokeAsync(login;
+			//return OnSubmit.InvokeAsync(login);
+		}
+		else
+			return null; //Task.FromResult(false);
+						 //return await Task.FromResult(true);
+	}
+
+}
 
