@@ -1,0 +1,148 @@
+﻿@page  "/address"
+
+@using NewEra.PolicyholderV2.Models;
+
+<h3>@Title</h3>
+
+<EditForm Model="@newAddress" class="form-group p-5" OnSubmit="@FormSubmitted" style="background-color:whitesmoke;">
+	<DataAnnotationsValidator />
+	@*<div class="field">
+			<label class="col-form-label">Current Password</label>
+			<div class="control">
+				<InputText id="oldAddress1" class="input" @bind-Value="@newAddress.AddressL1"></InputText>
+				<ValidationMessage For="()=> newAddress.AddressL1"></ValidationMessage>
+			</div>
+		</div>*@
+
+	@*<form class="col-md-9 col-sm-12 p-5">*@	 @*Do NOT use form*@
+
+	<div class="form-group ">
+		<label for="inputAddress">Address 1</label>
+		<input type="text" class="form-control" id="inputAddress" @bind-value="newAddress.AddressL1" placeholder="1234 Main St">
+		<div class="col-form-label ">
+			<ValidationMessage For="()=> newAddress.AddressL1"></ValidationMessage>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="inputAddress2">Address 2</label>
+		<input type="text" class="form-control" id="inputAddress2" @bind-value="newAddress.AddressL2" placeholder="Apartment, studio, or floor">
+		<div class="col-form-label ">
+			<ValidationMessage For="()=> newAddress.AddressL2"></ValidationMessage>
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-5">
+			<label for="inputCity">City</label>
+			<input type="text" class="form-control" id="inputCity" @bind-value="newAddress.City">
+			<div class="col-form-label ">
+				<ValidationMessage For="()=> newAddress.City"></ValidationMessage>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label for="inputState">State</label>
+			<USStates OnValueChanged="@(e=> OnStateSearchTextChanged(e))"></USStates>
+			<div class="col-form-label ">
+				<ValidationMessage For="()=> newAddress.State"></ValidationMessage>
+			</div>
+		</div>
+		<div class="form-group col-md-3">
+			<label for="inputZip">Zip</label>
+			<input type="text" class="form-control" id="inputZip" @bind-value="newAddress.PostalCode">
+			<div class="col-form-label ">
+				<ValidationMessage For="()=> newAddress.PostalCode"></ValidationMessage>
+			</div>
+		</div>
+	</div>
+	<div class="form-group col-5 p-0">
+		<label for="inputCountry">Country</label>
+		<input type="text" class="form-control" id="inputCountry" @bind-value="@Country">
+		<div class="col-form-label ">
+			<ValidationMessage For="()=> newAddress.Country"></ValidationMessage>
+		</div>
+	</div>
+	<div class="col-12 text-danger p-0"> @LastSubmitResult</div>
+
+	<div class="form-group col-12 mt-5">
+		@switch (ButtonType)
+		{
+			case UpdateType.Cancel:
+				<button type="button" class="btn btn-primary">Cancel</button>
+				break;
+			case UpdateType.AddCancel:
+				<button type="submit" class="btn btn-primary">Add</button>
+				<button type="button" class="btn btn-primary">Cancel</button>
+				break;
+			case UpdateType.EditCancel:
+				<button type="submit" class="btn btn-primary">Edit</button>
+				<button type="button" class="btn btn-primary">Cancel</button>
+				break;
+		}
+		@*<button type="submit" class="btn btn-primary">Add</button>
+		<button type="submit" class="btn btn-primary">Edit</button>
+		<button type="button" class="btn btn-primary">Cancel</button>*@
+	</div>
+	@*</form>*@
+</EditForm>
+
+
+@*<div class="custom-file col-9 p-5">
+		<input type="file" class="custom-file-input" id="customFile">
+		<label class="custom-file-label" for="customFile">Choose file</label>
+</div>*@
+
+@code {
+
+			[Parameter]
+			public String Title { get; set; }
+
+			[Parameter]
+			public EventCallback<InputAddress> OnSubmit { get; set; }
+
+			[Parameter]
+			public string Country { get; set; } //= "United States";
+
+			[Parameter]
+			public UpdateType ButtonType { get; set; }
+
+			InputAddress newAddress = new InputAddress();
+			//InputEmailModel validateEmailModel = new InputEmailModel();
+			[Parameter]
+			public EventCallback<bool> OnClose { get; set; }
+
+			string LastSubmitResult;
+
+			private Task FormSubmitted(EditContext editContext)
+			{
+				bool formIsValid = editContext.Validate();
+
+				LastSubmitResult =
+				  formIsValid
+				  ? "Success - Update Address"
+				  : "Failure - Some Fields are Required";
+
+				if (formIsValid)
+					return OnSubmit.InvokeAsync(newAddress);
+				else
+					return null;        // not to close the dialog box unless CancelSubmit()
+			}
+
+
+	private void OnStateSearchTextChanged(ChangeEventArgs changeEventArgs)
+	{
+		newAddress.State = changeEventArgs.Value.ToString().ToUpper();
+	}
+
+
+	private bool  UpdateCancel()
+	{
+		return false; // OnClose.InvokeAsync(false);
+	}
+
+	public enum UpdateType
+	{
+		Cancel,
+		AddCancel,
+		EditCancel
+	}
+
+}
