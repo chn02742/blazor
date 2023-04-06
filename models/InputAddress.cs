@@ -4,18 +4,19 @@ namespace NewEra.PolicyholderV2.Models
 {
 	public class InputAddress
 	{
-		[Required]
+		[Required, MaxLength(100)]
+		[Display(Name = "AddressL 1")]
 		public string AddressL1 { get; set; }
 		public string AddressL2 { get; set; }
 		public string AddressL3 { get; set; }
-		[Required]
+		[Required, MaxLength(50)]
 		public string City { get; set; }
 		[Required]
 		public string State { get; set; }
-		[Required]
+		[Required, MaxLength(35)]
 		[Display(Name = "Country")]
 		public string Country { get; set; }
-		[Required]
+		[Required, MaxLength(20)]
 		[Display(Name = "Postal Code")]
 		public string PostalCode { get; set; }
 	}
