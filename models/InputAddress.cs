@@ -19,4 +19,11 @@ namespace NewEra.PolicyholderV2.Models
 		[Display(Name = "Postal Code")]
 		public string PostalCode { get; set; }
 	}
+	
+	public enum UpdateType
+	{
+		Cancel,
+		AddCancel,
+		EditCancel
+	}
 }
