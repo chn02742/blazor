@@ -66,15 +66,15 @@
 		@switch (ButtonType)
 		{
 			case UpdateType.Cancel:
-				<button type="button" class="btn btn-primary">Cancel</button>
+				<button type="button" class="btn btn-primary"  @onclick="UpdateCancel">Cancel</button>
 				break;
 			case UpdateType.AddCancel:
 				<button type="submit" class="btn btn-primary">Add</button>
-				<button type="button" class="btn btn-primary">Cancel</button>
+				<button type="button" class="btn btn-primary" @onclick="UpdateCancel">Cancel</button>
 				break;
 			case UpdateType.EditCancel:
 				<button type="submit" class="btn btn-primary">Edit</button>
-				<button type="button" class="btn btn-primary">Cancel</button>
+				<button type="button" class="btn btn-primary" @onclick="UpdateCancel">Cancel</button>
 				break;
 		}
 		@*<button type="submit" class="btn btn-primary">Add</button>
@@ -127,9 +127,10 @@
 	}
 
 
-	private bool  UpdateCancel()
-	{
-		return false; // OnClose.InvokeAsync(false);
+	private void  UpdateCancel()
+	{		
+		newAddress = new InputAddress();
+		LastSubmitResult = "";	
 	}
 
 	public enum UpdateType
