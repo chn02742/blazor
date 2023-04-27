@@ -1,0 +1,93 @@
+<style>
+	body {
+		font-family: Arial;
+		height: 100%;
+	}
+
+	/* Style the tab */
+	.tab {
+		overflow: hidden;
+		border: 1px solid #ccc;
+		background-color: white;
+	}
+
+		/* Style the buttons inside the tab */
+		.tab button {
+			background-color: gainsboro;
+			/*width: 500px;*/
+			float: left;
+			border: none;
+			outline: none;
+			cursor: pointer;
+			padding: 14px 16px;
+			transition: .5s;
+			font-size: 17px;
+			font-weight: 200;
+			color: midnightblue;
+		}
+
+			/* Change background color of buttons on hover */
+			.tab button:hover {
+				background-color: dimgrey;
+				color: white;
+			}
+
+			/* Create an active/current tablink class */
+			.tab button.active {
+				background-color: darkblue;
+				font-weight: 800;
+				/*color: navy;*/
+			}
+
+	/* Style the tab content */
+	.tabcontent {
+		padding: 6px 12px;
+		border: 1px solid #ccc;
+		height: 100%;
+		border-top: none;
+	}
+</style>
+
+<CascadingValue Value="this">
+	<div class="tab" role="group">
+		@foreach (TabPage tabPage in Pages)
+		{
+			<button type="button"
+					class=" @GetButtonClass(tabPage)"
+					@onclick=@( () => ActivatePage(tabPage) )>
+				<i class="@tabPage.TagIcon"></i>
+				@tabPage.Text
+			</button>
+		}
+	</div>
+	@ChildContent
+</CascadingValue>
+
+@code {
+
+	// Next line is needed so we are able to add <TabPage> components inside
+	[Parameter]
+	public RenderFragment ChildContent { get; set; }
+
+	public TabPage ActivePage { get; set; }
+	List<TabPage> Pages = new List<TabPage>();
+
+	internal void AddPage(TabPage tabPage)
+	{
+		Pages.Add(tabPage);
+		if (Pages.Count == 1)
+			ActivePage = tabPage;
+		StateHasChanged();
+	}
+
+	string GetButtonClass(TabPage page)
+	{
+		return page == ActivePage ? "btn-primary" : "btn-secondary";
+	}
+
+	void ActivatePage(TabPage page)
+	{
+		ActivePage = page;
+	}
+
+}
